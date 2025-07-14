@@ -22,6 +22,7 @@ export default {
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
+      package: "com.sakshi_expo.Boilerplate",
     },
     web: {
       favicon: "./assets/favicon.png",

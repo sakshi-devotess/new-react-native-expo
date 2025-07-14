@@ -1,30 +1,32 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useState, useRef } from "react";
 import {
-  Text,
   View,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Dimensions,
-  ScrollView,
-  Keyboard,
+  Text,
+  TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  Animated,
+  SafeAreaView,
+  ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import backImage from "../../../../assets/signupBg.jpg";
-import { IAddMobileScreenProps } from "./AddMobileNumber.model";
+import AppButton from "../../../components/Button";
 import { Controller, useForm } from "react-hook-form";
-import { colors } from "../../../config/constants";
+import Input from "../../../components/Form/Input/Input";
+import { IAddMobileNumberForm } from "./AddMobileNumber.model";
+import { setApiErrorsToForm } from "../../../library/utilities/message";
+import authApiInstance from "../../../services/auth/auth";
 
 const { height } = Dimensions.get("window");
 
-export default function AddMobileScreen(
-  props: Readonly<IAddMobileScreenProps>
-) {
-  const { navigation } = props;
+const AddMobileScreen = () => {
   const {
     control,
     handleSubmit,
@@ -32,121 +34,134 @@ export default function AddMobileScreen(
     reset,
   } = useForm({
     defaultValues: {
-      username: "",
-      password: "",
+      mobile: "",
     },
   });
   const methods = useForm();
   const [isLogin, setIsLogin] = useState(false);
-  useFocusEffect(
-    useCallback(() => {
-      reset({
-        username: "",
-        password: "",
-      });
-    }, [])
-  );
-  const onSubmit = async (data) => {
+
+  const handleSendOTP = async (data: IAddMobileNumberForm) => {
+    setIsLogin(true);
     try {
+      const res = await authApiInstance.requestOtp({
+        mobile: data.mobile,
+      });
+      console.log("object :>> ", res);
+      if (res?.status) {
+        reset();
+        Alert.alert("Success", "OTP sent to your mobile number");
+      }
     } catch (err: any) {
+      setApiErrorsToForm(err?.response, methods);
     } finally {
       setIsLogin(false);
     }
   };
+
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <View style={styles.imageWrapper}>
-            <Image source={backImage} style={styles.backImage} />
-          </View>
-
-          <View style={styles.whiteSheet}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            style={styles.content}
+          >
             <ScrollView
-              contentContainerStyle={styles.scrollContainer}
+              contentContainerStyle={styles.scrollContent}
               keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
             >
-              <SafeAreaView style={styles.form}>
-                <Text style={styles.title}>Login</Text>
-              </SafeAreaView>
+              <Text style={styles.title}>Continue with Mobile number</Text>
+
+              <Controller
+                control={control}
+                // rules={{
+                //   required: "Mobile is required",
+                // }}
+                name="mobile"
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    placeholder="Enter 10-digit number"
+                    value={value}
+                    onChange={onChange}
+                    // errorMessage={errors.mobile?.message}
+                    maxLength={10}
+                    keyboardType="phone-pad"
+                  />
+                )}
+              />
+
+              <AppButton
+                text={"Send OTP"}
+                variant="primary"
+                onPress={handleSubmit(handleSendOTP)}
+                disabled={isLogin}
+              />
             </ScrollView>
-          </View>
+          </KeyboardAvoidingView>
         </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
-
-  title: {
-    alignSelf: "center",
-    fontSize: height * 0.04,
-    fontWeight: "bold",
-    color: "black",
-    paddingBottom: 20,
-    marginTop: 10,
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
   },
-  button: {
-    height: 50,
-    backgroundColor: colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginTop: 15,
-    marginBottom: 10,
-  },
-  noAccountSection: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  forgotPasswordSection: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  noAccountText: {
-    color: "gray",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  signUpText: {
-    color: colors.pink,
-    fontWeight: "600",
-    fontSize: 14,
-  },
-  imageWrapper: {
-    height: height * 0.25,
-    width: "100%",
-  },
-  backImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  whiteSheet: {
-    position: "absolute",
-    top: height * 0.25,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#fff",
-    paddingTop: 20,
-  },
-  scrollContainer: {
+  scrollContent: {
     flexGrow: 1,
     justifyContent: "center",
-    paddingHorizontal: 30,
+    paddingVertical: 20,
   },
-  form: {
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    marginBottom: 20,
+  },
+  countryCode: {
+    fontSize: 16,
+    marginRight: 8,
+    color: "#444",
+  },
+  input: {
     flex: 1,
+    height: 50,
+    fontSize: 16,
+    color: "#000",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    paddingVertical: 15,
+    borderRadius: 10,
+    width: "100%",
+    alignSelf: "center",
+    elevation: 3,
+  },
+  buttonText: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#fff",
   },
 });
+
+export default AddMobileScreen;
