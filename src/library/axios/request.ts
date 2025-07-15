@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "../../config/constants";
 import * as SecureStore from "expo-secure-store";
-import { pushMessage } from "../utilities/message";
+import { pushBadRequestMessage, pushMessage } from "../utilities/message";
 import { logout } from "../utilities/logoutUser";
 import Toast from "react-native-toast-message";
 
@@ -38,12 +38,13 @@ request.interceptors.response.use(
   async (error) => {
     const { response } = error;
     const prevRequestConfig = error.config;
-    switch (response?.status) {
+
+    switch (response?.data?.statusCode) {
       case 401:
         await logout();
         break;
       case 400:
-        pushMessage(response.data);
+        pushBadRequestMessage(response.data);
         break;
       default:
         Toast.show({

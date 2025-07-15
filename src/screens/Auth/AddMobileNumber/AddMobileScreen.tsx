@@ -1,43 +1,41 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
-  TouchableOpacity,
-  Alert,
   StyleSheet,
   Image,
-  ImageBackground,
-  Animated,
   SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Dimensions,
 } from "react-native";
 import AppButton from "../../../components/Button";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../../components/Form/Input/Input";
 import { IAddMobileNumberForm } from "./AddMobileNumber.model";
-import { setApiErrorsToForm } from "../../../library/utilities/message";
+import {
+  setApiErrorsToForm,
+  showToast,
+} from "../../../library/utilities/message";
 import authApiInstance from "../../../services/auth/auth";
-
-const { height } = Dimensions.get("window");
+import addMobileNumber from "../../../../assets/add-mobile-number.png";
+import { useNavigation } from "@react-navigation/native";
 
 const AddMobileScreen = () => {
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
+    ...methods
   } = useForm({
     defaultValues: {
       mobile: "",
     },
   });
-  const methods = useForm();
   const [isLogin, setIsLogin] = useState(false);
 
   const handleSendOTP = async (data: IAddMobileNumberForm) => {
@@ -46,10 +44,12 @@ const AddMobileScreen = () => {
       const res = await authApiInstance.requestOtp({
         mobile: data.mobile,
       });
-      console.log("object :>> ", res);
       if (res?.status) {
         reset();
-        Alert.alert("Success", "OTP sent to your mobile number");
+        showToast("info", "Otp sent successfully. Please check your mobile.");
+        navigation.navigate("VerifyOtp", {
+          mobile: data.mobile,
+        });
       }
     } catch (err: any) {
       setApiErrorsToForm(err?.response, methods);
@@ -70,20 +70,18 @@ const AddMobileScreen = () => {
               contentContainerStyle={styles.scrollContent}
               keyboardShouldPersistTaps="handled"
             >
+              <Image source={addMobileNumber} style={styles.image} />
               <Text style={styles.title}>Continue with Mobile number</Text>
 
               <Controller
                 control={control}
-                // rules={{
-                //   required: "Mobile is required",
-                // }}
                 name="mobile"
                 render={({ field: { onChange, value } }) => (
                   <Input
                     placeholder="Enter 10-digit number"
                     value={value}
                     onChange={onChange}
-                    // errorMessage={errors.mobile?.message}
+                    errorMessage={errors.mobile?.message}
                     maxLength={10}
                     keyboardType="phone-pad"
                   />
@@ -148,19 +146,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
   },
-  button: {
-    backgroundColor: "#007bff",
-    paddingVertical: 15,
-    borderRadius: 10,
-    width: "100%",
+  image: {
+    height: 180,
+    resizeMode: "contain",
     alignSelf: "center",
-    elevation: 3,
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
+    marginBottom: 20,
   },
 });
 

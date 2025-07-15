@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -7,9 +7,9 @@ import {
   ViewStyle,
   TextStyle,
   ActivityIndicator,
-} from 'react-native';
+} from "react-native";
 
-type Variant = 'primary' | 'secondary' | 'danger' | 'cancel';
+type Variant = "primary" | "secondary" | "danger" | "cancel";
 
 interface ButtonProps {
   text: string;
@@ -27,7 +27,7 @@ const AppButton: React.FC<ButtonProps> = ({
   onPress,
   loading = false,
   disabled = false,
-  variant = 'primary',
+  variant = "primary",
   style,
   textStyle,
   disableForMs = 1000,
@@ -42,18 +42,21 @@ const AppButton: React.FC<ButtonProps> = ({
     }
 
     setInternalLoading(true);
-    await onPress?.();
-    setInternalLoading(false);
+    try {
+      await onPress?.();
+    } finally {
+      setInternalLoading(false);
+    }
   };
 
   const isDisabled = disabled || loading || internalLoading || tempDisabled;
   const isLoading = loading || internalLoading;
 
   const variantStyles = {
-    primary: { backgroundColor: '#007bff', textColor: '#fff' },
-    secondary: { backgroundColor: '#ddd', textColor: '#fff' },
-    danger: { backgroundColor: '#dc3545', textColor: '#fff' },
-    cancel: { backgroundColor: '#f0f0f0', textColor: '#333' },
+    primary: { backgroundColor: "#007bff", textColor: "#fff" },
+    secondary: { backgroundColor: "#ddd", textColor: "#fff" },
+    danger: { backgroundColor: "#dc3545", textColor: "#fff" },
+    cancel: { backgroundColor: "#f0f0f0", textColor: "#333" },
   };
 
   const { backgroundColor, textColor } = variantStyles[variant];
@@ -69,9 +72,13 @@ const AppButton: React.FC<ButtonProps> = ({
         style,
       ]}
     >
-      {isLoading && <ActivityIndicator size="small" color="#fff" style={styles.loader} />}
+      {isLoading && (
+        <ActivityIndicator size="small" color="#fff" style={styles.loader} />
+      )}
       <View>
-        <Text style={[styles.text, { color: textColor }, textStyle]}>{text}</Text>
+        <Text style={[styles.text, { color: textColor }, textStyle]}>
+          {text}
+        </Text>
       </View>
     </Pressable>
   );
@@ -81,20 +88,20 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   disabled: {
     opacity: 0.5,
   },
   text: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: "bold",
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   loader: {
     right: 10,

@@ -71,13 +71,3 @@ export const dateTimeTemplate = (options: any) => {
   const date = new Date(Number(options)).toLocaleString();
   return date;
 };
-
-export const showToast = (type: string, text1: string, text2 = "") => {
-  Toast.show({
-    type: type, // 'success', 'error', 'info', etc.
-    text1: text1, // Main message
-    text2: text2, // Sub-message (optional)
-    visibilityTime: 2000,
-    position: "bottom",
-  });
-};

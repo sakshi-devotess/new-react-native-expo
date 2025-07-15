@@ -54,7 +54,6 @@ export default function Input({
   const error: string =
     errorMessage ??
     String(formContext?.formState?.errors?.[attribute]?.message || "");
-
   return (
     <View style={styles.inputWrapper}>
       <View

@@ -1,5 +1,5 @@
-import Toast from 'react-native-toast-message';
-import { capitalizeFirstLetter, keyExists } from './helperFunction';
+import Toast from "react-native-toast-message";
+import { capitalizeFirstLetter, keyExists } from "./helperFunction";
 
 const TOAST_LIFE: { [key: string]: number } = {
   error: 2000,
@@ -7,7 +7,7 @@ const TOAST_LIFE: { [key: string]: number } = {
   warn: 4000,
   info: 3000,
 };
-type ToastSeverity = 'error' | 'success' | 'warn' | 'info';
+type ToastSeverity = "error" | "success" | "warn" | "info";
 export const pushMessage = (data: any) => {
   const toastArray: { severity: ToastSeverity; detail: string }[] = [];
 
@@ -25,12 +25,15 @@ export const pushMessage = (data: any) => {
     const errorResponse = data.errors[0];
     const originalMessage = errorResponse?.extensions?.originalError?.message;
 
-    if (typeof originalMessage === 'string') {
-      toastArray.push({ severity: 'error', detail: originalMessage });
+    if (typeof originalMessage === "string") {
+      toastArray.push({ severity: "error", detail: originalMessage });
     } else if (Array.isArray(originalMessage)) {
       originalMessage.forEach((item: any) => {
         if (item.message) {
-          toastArray.push({ severity: item.type || 'error', detail: item.message });
+          toastArray.push({
+            severity: item.type || "error",
+            detail: item.message,
+          });
         }
       });
     }
@@ -51,6 +54,24 @@ export const pushMessage = (data: any) => {
   }
 };
 
+export const pushBadRequestMessage = (data: any) => {
+  const toastArray: { severity: ToastSeverity; detail: string }[] = [];
+
+  if (Array.isArray(data?.message)) {
+    data.message.forEach((item: any) => {
+      if (item.show && item.message) {
+        toastArray.push({ severity: item.type, detail: item.message });
+      }
+    });
+  } else if (typeof data?.message === "string") {
+    toastArray.push({ severity: "error", detail: data.message });
+  }
+
+  if (toastArray.length > 0) {
+    showGroupedMessages(toastArray);
+  }
+};
+
 function showGroupedMessages(messageArray: any[]) {
   const groupedMessages: { [key: string]: string[] } = {
     error: [],
@@ -63,22 +84,22 @@ function showGroupedMessages(messageArray: any[]) {
     messageArray.forEach((message) => {
       const messageText = message.detail || message.content;
       switch (message.severity) {
-        case 'error':
+        case "error":
           if (!groupedMessages.error.includes(messageText)) {
             groupedMessages.error.push(messageText);
           }
           break;
-        case 'success':
+        case "success":
           if (!groupedMessages.success.includes(messageText)) {
             groupedMessages.success.push(messageText);
           }
           break;
-        case 'warn':
+        case "warn":
           if (!groupedMessages.warn.includes(messageText)) {
             groupedMessages.warn.push(messageText);
           }
           break;
-        case 'info':
+        case "info":
           if (!groupedMessages.info.includes(messageText)) {
             groupedMessages.info.push(messageText);
           }
@@ -102,16 +123,16 @@ function showGroupedMessages(messageArray: any[]) {
 // Helper to map severity (warn => info, etc)
 function mapSeverityToToastType(severity: string) {
   switch (severity) {
-    case 'error':
-      return 'error';
-    case 'success':
-      return 'success';
-    case 'info':
-      return 'info';
-    case 'warn':
-      return 'info'; // no direct 'warn' in react-native-toast-message
+    case "error":
+      return "error";
+    case "success":
+      return "success";
+    case "info":
+      return "info";
+    case "warn":
+      return "info"; // no direct 'warn' in react-native-toast-message
     default:
-      return 'info';
+      return "info";
   }
 }
 
@@ -131,10 +152,11 @@ export function setApiErrorsToForm(
     methods.setError(moreFieldName ? `${moreFieldName}.${index}.${key}` : key, {
       message: `${capitalizeFirstLetter(value)}`,
     });
+    console.log("methods :>> ", getAllFields);
     // Check if field is already present in the form
     !keyExists(getAllFields, key) &&
       toastArray.push({
-        severity: 'error',
+        severity: "error",
         detail: value,
         life: TOAST_LIFE.error,
       });
@@ -150,7 +172,7 @@ export function setErrorsToForm(
   methods: any,
   moreFieldName: string | null = null,
   index: number | null = null,
-  extraName: string = ''
+  extraName: string = ""
 ) {
   const response: any = Object.values(data)[0];
   let responseData: Record<string, string> = {};
@@ -178,14 +200,16 @@ export function setErrorsToForm(
             }
           } else {
             const fullPath =
-              moreFieldName && index !== null ? `${moreFieldName}.${index}.${key}` : key;
+              moreFieldName && index !== null
+                ? `${moreFieldName}.${index}.${key}`
+                : key;
             methods.setError(fullPath, { message: errorMessage });
           }
 
           // If the key doesn't exist in form, push to toast
           if (!keyExists(getAllFields, key)) {
             toastArray.push({
-              severity: 'error',
+              severity: "error",
               detail: errorMessage,
               life: 4000,
             });
@@ -210,7 +234,12 @@ export function setErrorsToForm(
  * @returns  boolean
  */
 
-export function formFieldExists(getAllFields: any, index: number, extraName: string, key: string) {
+export function formFieldExists(
+  getAllFields: any,
+  index: number,
+  extraName: string,
+  key: string
+) {
   const dataArray: any = Object.values(getAllFields)[0];
   const dataObject = dataArray[index][`${extraName}`];
   return Object.keys(dataObject).includes(key);
@@ -220,7 +249,7 @@ export const GraphQLQueryFailPopUp = (error: any) => {
   let toastArray = [];
   const messageText = `This ${error[0]?.path[0]} query failed, Please reload the page and try again.`;
   toastArray.push({
-    severity: 'error',
+    severity: "error",
     life: 10000,
     content: (
       <div className="text-center">
@@ -244,4 +273,15 @@ export const GraphQLQueryFailPopUp = (error: any) => {
   if (toastArray.length > 0) {
     showGroupedMessages(toastArray);
   }
+};
+
+export const showToast = (type: string, text1: string, text2 = "") => {
+  Toast.show({
+    type: type, // 'success', 'error', 'info', etc.
+    text1: text1, // Main message
+    text2: text2, // Sub-message (optional)
+    visibilityTime: 2000,
+    position: "top", // moves toast to top
+    topOffset: 50, // pushes below the notch/status bar
+  });
 };
