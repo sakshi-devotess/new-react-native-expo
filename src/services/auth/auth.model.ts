@@ -12,3 +12,8 @@ export interface ISetMpin {
   mpin: string;
   confirmMpin: string;
 }
+
+export interface IVerifyMpin {
+  mobile: string;
+  mpin: string;
+}

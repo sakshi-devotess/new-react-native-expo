@@ -16,7 +16,8 @@ const request = axios.create({
 request.interceptors.request.use(
   async (config) => {
     try {
-      const storedData = await SecureStore.getItemAsync("userData");
+      const storedData = await SecureStore.getItemAsync("user");
+
       if (!storedData) throw new Error("No user data in SecureStore");
 
       const parsedData = JSON.parse(storedData);

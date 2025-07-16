@@ -13,11 +13,11 @@ import {
   Dimensions,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import AppButton from "../../../components/Button";
 import { setApiErrorsToForm } from "../../../library/utilities/message";
 import verifyOtp from "../../../../assets/verify-otp.png";
-import { ISetMpinForm, ISetMpinProps } from "./SetMpin.model";
+import { IVerifyMpinProps, IVerifyMpinForm } from "./LoginWithMpin.model";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
 import authApiInstance from "../../../services/auth/auth";
 import { saveUser } from "../../../library/utilities/secureStore";
@@ -25,10 +25,9 @@ import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
 
 const { width, height } = Dimensions.get("window");
 
-const SetMpinScreen = () => {
-  const navigation = useNavigation();
+const LoginWithMpinScreen = () => {
   const route = useRoute();
-  const { mobile } = route.params as ISetMpinProps;
+  const { mobile } = route.params as IVerifyMpinProps;
   const [isLoading, setIsLoading] = useState(false);
   const { setUser, setIsAuthenticated } = useContext(AuthContext);
 
@@ -40,18 +39,16 @@ const SetMpinScreen = () => {
   } = useForm({
     defaultValues: {
       mpin: "",
-      confirmMpin: "",
     },
   });
 
-  const onSubmit = async (data: ISetMpinForm) => {
-    const { mpin, confirmMpin } = data;
+  const onSubmit = async (data: IVerifyMpinForm) => {
+    const { mpin } = data;
     setIsLoading(true);
     try {
-      const res = await authApiInstance.setMpin({
+      const res = await authApiInstance.verifyMpin({
         mobile: mobile,
         mpin: mpin,
-        confirmMpin: confirmMpin,
       });
       if (res?.status) {
         const userData = {
@@ -84,39 +81,32 @@ const SetMpinScreen = () => {
             keyboardShouldPersistTaps="handled"
           >
             <View style={styles.container}>
+              <Text style={styles.heading}>Welcome back 👋</Text>
+              <Text style={styles.subText}>Login securely using your MPIN</Text>
+
               <Image source={verifyOtp} style={styles.image} />
 
-              <Text style={styles.title}>Set Your MPIN</Text>
+              <View>
+                <Text style={styles.label}>Enter your MPIN</Text>
 
-              <Controller
-                control={control}
-                name="mpin"
-                render={({ field: { onChange, value } }) => (
-                  <OtpInput
-                    value={value}
-                    onChange={onChange}
-                    errorMessage={errors.mpin?.message}
-                  />
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="mpin"
+                  render={({ field: { onChange, value } }) => (
+                    <OtpInput
+                      value={value}
+                      onChange={onChange}
+                      errorMessage={errors.mpin?.message}
+                    />
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="confirmMpin"
-                render={({ field: { onChange, value } }) => (
-                  <OtpInput
-                    value={value}
-                    onChange={onChange}
-                    errorMessage={errors.confirmMpin?.message}
-                  />
-                )}
-              />
-
-              <AppButton
-                text={"Set MPIN"}
-                onPress={handleSubmit(onSubmit)}
-                disabled={isLoading}
-              />
+                <AppButton
+                  text={"Verify MPIN"}
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={isLoading}
+                />
+              </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -139,11 +129,29 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
+  heading: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#222",
+    marginBottom: 4,
+  },
+  subText: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 20,
+  },
   image: {
     width: width * 0.6,
     height: height * 0.25,
     resizeMode: "contain",
-    marginBottom: 20,
+    marginBottom: 30,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#444",
+    marginTop: 16,
+    marginBottom: 8,
   },
   title: {
     fontSize: width * 0.05,
@@ -153,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetMpinScreen;
+export default LoginWithMpinScreen;

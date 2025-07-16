@@ -1,5 +1,5 @@
 import request from "../../library/axios/request";
-import { IRequestOtp, ISetMpin, IVerifyOtp } from "./auth.model";
+import { IRequestOtp, ISetMpin, IVerifyMpin, IVerifyOtp } from "./auth.model";
 
 class AuthApi {
   ENDPOINT = "/auth";
@@ -20,6 +20,13 @@ class AuthApi {
 
   async setMpin(data: ISetMpin): Promise<any> {
     const url = `${this.ENDPOINT}/set-mpin`;
+    return request({ url, method: "POST", data }).then((res: any) => {
+      return res?.data;
+    });
+  }
+
+  async verifyMpin(data: IVerifyMpin): Promise<any> {
+    const url = `${this.ENDPOINT}/verify-mpin`;
     return request({ url, method: "POST", data }).then((res: any) => {
       return res?.data;
     });

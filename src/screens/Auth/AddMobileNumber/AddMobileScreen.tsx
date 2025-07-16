@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ import {
 import authApiInstance from "../../../services/auth/auth";
 import addMobileNumber from "../../../../assets/add-mobile-number.png";
 import { useNavigation } from "@react-navigation/native";
+import { getUser } from "../../../library/utilities/secureStore";
 
 const AddMobileScreen = () => {
   const navigation = useNavigation();
@@ -37,6 +38,7 @@ const AddMobileScreen = () => {
     },
   });
   const [isLogin, setIsLogin] = useState(false);
+  const [savedMobile, setSavedMobile] = useState<string | null>(null);
 
   const handleSendOTP = async (data: IAddMobileNumberForm) => {
     setIsLogin(true);
@@ -58,6 +60,15 @@ const AddMobileScreen = () => {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      const user = await getUser();
+      if (user?.mobile && user?.mpin) {
+        setSavedMobile(user.mobile);
+      }
+    })();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -70,6 +81,22 @@ const AddMobileScreen = () => {
               contentContainerStyle={styles.scrollContent}
               keyboardShouldPersistTaps="handled"
             >
+              <Text style={styles.welcomeText}>Welcome back!</Text>
+
+              {savedMobile && (
+                <View style={styles.continueBox}>
+                  <AppButton
+                    text={`Continue with ${savedMobile}`}
+                    onPress={() =>
+                      navigation.navigate("LoginWithMpin", {
+                        mobile: savedMobile,
+                      })
+                    }
+                    variant="primary"
+                  />
+                  <Text style={styles.orText}>OR</Text>
+                </View>
+              )}
               <Image source={addMobileNumber} style={styles.image} />
               <Text style={styles.title}>Continue with Mobile number</Text>
 
@@ -151,6 +178,22 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     alignSelf: "center",
     marginBottom: 20,
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  continueBox: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  orText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "#999",
   },
 });
 
