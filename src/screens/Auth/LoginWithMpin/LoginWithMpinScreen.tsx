@@ -11,9 +11,10 @@ import {
   Keyboard,
   Platform,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import AppButton from "../../../components/Button";
 import { setApiErrorsToForm } from "../../../library/utilities/message";
 import verifyOtp from "../../../../assets/verify-otp.png";
@@ -22,11 +23,13 @@ import OtpInput from "../../../components/Form/OtpInput/OtpInput";
 import authApiInstance from "../../../services/auth/auth";
 import { saveUser } from "../../../library/utilities/secureStore";
 import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
+import { colors } from "../../../config/constants";
 
 const { width, height } = Dimensions.get("window");
 
 const LoginWithMpinScreen = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const { mobile } = route.params as IVerifyMpinProps;
   const [isLoading, setIsLoading] = useState(false);
   const { setUser, setIsAuthenticated } = useContext(AuthContext);
@@ -53,9 +56,10 @@ const LoginWithMpinScreen = () => {
       if (res?.status) {
         const userData = {
           access_token: res.data?.tokens?.access_token,
+          refresh_token: res.data?.tokens?.refresh_token,
           mobile: mobile,
           mpin: mpin,
-          userId: res.data?.user?._id,
+          id: res.data?.user?.id,
         };
         await saveUser(userData);
         setUser(userData);
@@ -86,7 +90,7 @@ const LoginWithMpinScreen = () => {
 
               <Image source={verifyOtp} style={styles.image} />
 
-              <View>
+              <View style={styles.inputWrapper}>
                 <Text style={styles.label}>Enter your MPIN</Text>
 
                 <Controller
@@ -100,6 +104,14 @@ const LoginWithMpinScreen = () => {
                     />
                   )}
                 />
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("EnterMobile")}
+                  style={styles.forgotMpinContainer}
+                >
+                  <Text style={styles.forgotMpinText}>
+                    Forgot MPIN? Login with OTP
+                  </Text>
+                </TouchableOpacity>
 
                 <AppButton
                   text={"Verify MPIN"}
@@ -158,6 +170,19 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000",
     marginBottom: 10,
+  },
+  forgotMpinContainer: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 20,
+  },
+  forgotMpinText: {
+    color: colors.primary,
+    fontSize: 14,
+  },
+  inputWrapper: {
+    width: "100%",
+    marginTop: 16,
   },
 });
 

@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { config } from "../../config/constants";
-import * as SecureStore from "expo-secure-store";
-import { pushBadRequestMessage, pushMessage } from "../utilities/message";
+import { pushBadRequestMessage } from "../utilities/message";
 import { logout } from "../utilities/logoutUser";
 import Toast from "react-native-toast-message";
+import { getUser, saveUser } from "../utilities/secureStore";
+import authApiInstance from "../../services/auth/auth";
 
 const request = axios.create({
   baseURL: config.apiUrl,
@@ -16,12 +17,10 @@ const request = axios.create({
 request.interceptors.request.use(
   async (config) => {
     try {
-      const storedData = await SecureStore.getItemAsync("user");
+      const storedData = await getUser();
 
       if (!storedData) throw new Error("No user data in SecureStore");
-
-      const parsedData = JSON.parse(storedData);
-      const { access_token } = parsedData;
+      const { access_token } = storedData;
 
       if (access_token && config.headers) {
         config.headers.Authorization = `Bearer ${access_token}`;
@@ -42,7 +41,39 @@ request.interceptors.response.use(
 
     switch (response?.data?.statusCode) {
       case 401:
-        await logout();
+        const user = await getUser();
+        const refresh_token = user?.refresh_token;
+        if (!refresh_token) {
+          await logout();
+        } else if (!prevRequestConfig.headers["X-RefreshToken"]) {
+          try {
+            const refreshed = await authApiInstance.refreshToken(refresh_token);
+            const {
+              access_token: new_access_token,
+              refresh_token: new_refresh_token,
+            } = refreshed?.data;
+            const updatedUser = {
+              ...user,
+              access_token: new_access_token,
+              refresh_token: new_refresh_token ?? refresh_token,
+            };
+            await saveUser(updatedUser);
+            prevRequestConfig.headers[
+              "Authorization"
+            ] = `Bearer ${new_access_token}`;
+
+            return request({
+              ...prevRequestConfig,
+              headers: prevRequestConfig.headers.toJSON(),
+            });
+          } catch (refreshError) {
+            console.error("Token refresh failed", refreshError);
+            await logout();
+          }
+        } else {
+          await logout();
+        }
+
         break;
       case 400:
         pushBadRequestMessage(response.data);

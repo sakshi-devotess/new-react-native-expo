@@ -12,3 +12,5 @@ export const colors = {
 export const config = {
   apiUrl: Constants.expoConfig?.extra?.apiUrl,
 };
+
+export const otpTimerSeconds = 80; // Duration for OTP Resend OTP Attempts in seconds

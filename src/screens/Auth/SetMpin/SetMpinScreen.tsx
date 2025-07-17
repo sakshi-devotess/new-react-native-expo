@@ -56,9 +56,10 @@ const SetMpinScreen = () => {
       if (res?.status) {
         const userData = {
           access_token: res.data?.tokens?.access_token,
+          refresh_token: res.data?.tokens?.refresh_token,
           mobile: mobile,
           mpin: mpin,
-          userId: res.data?.user?._id,
+          id: res.data?.user?.id,
         };
         await saveUser(userData);
         setUser(userData);

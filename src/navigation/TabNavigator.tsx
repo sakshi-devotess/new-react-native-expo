@@ -10,7 +10,7 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "gray",
-        headerShown: false,
+        headerShown: true,
         presentation: "modal",
       })}
     >

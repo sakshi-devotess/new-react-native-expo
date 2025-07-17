@@ -1,11 +1,10 @@
 import { ComponentProps } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
+import Settings from "../screens/Settings";
 
 export const TAB_ROUTE = {
   DASHBOARD: "Dashboard",
-  PLANS: "Plans",
-  CHATS: "Chats",
   SETTINGS: "Settings",
 };
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
@@ -25,5 +24,12 @@ export const TAB_ROUTES: TabRouteConfig[] = [
     label: "Home",
     icon: "home",
     focusedIcon: "home-outline",
+  },
+  {
+    name: TAB_ROUTE.SETTINGS,
+    component: Settings,
+    label: "Settings",
+    icon: "settings",
+    focusedIcon: "settings-outline",
   },
 ];

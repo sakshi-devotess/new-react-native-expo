@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { deleteUser, getUser } from "../library/utilities/secureStore";
 import { setLogoutFn } from "../library/utilities/logoutUser";
+import userApiInstance from "../services/user/user.service";
 
 export const AuthContext = createContext(null);
 
@@ -13,7 +14,14 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       const user = await getUser();
       if (user) {
-        setUser(user);
+        const userData = await userApiInstance.getUser(user.id);
+        const updatedUser = {
+          ...user,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          email: userData.email,
+        };
+        setUser(updatedUser);
       }
 
       setIsLoading(false);
@@ -24,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     setLogoutFn(async () => {
       await deleteUser();
       setUser(null);
+      setIsAuthenticated(false);
     });
   }, []);
 

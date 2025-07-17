@@ -31,6 +31,25 @@ class AuthApi {
       return res?.data;
     });
   }
+
+  async resendOtp(data: IRequestOtp): Promise<any> {
+    const url = `${this.ENDPOINT}/resend-otp`;
+    return request({ url, method: "POST", data }).then((res: any) => {
+      return res?.data;
+    });
+  }
+
+  public async refreshToken(refreshToken: string): Promise<any> {
+    const url = `${this.ENDPOINT}/refresh`;
+    return request({
+      url,
+      method: "POST",
+      data: { refresh_token: refreshToken },
+      headers: { "X-RefreshToken": true },
+    }).then((res) => {
+      return res.data;
+    });
+  }
 }
 
 const authApiInstance = new AuthApi();

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -14,10 +14,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AppButton from "../../../components/Button";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  useRoute,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
 import verifyOtp from "../../../../assets/verify-otp.png";
 import { IVerifyOtpProps } from "./VerifyOtp.model";
-import { colors } from "../../../config/constants";
+import { colors, otpTimerSeconds } from "../../../config/constants";
 import authApiInstance from "../../../services/auth/auth";
 import { showToast } from "../../../library/utilities/message";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
@@ -30,7 +34,7 @@ const VerifyOtpScreen = () => {
   const { mobile } = route.params as IVerifyOtpProps;
   const otpRef = useRef<any>(null);
   const [otp, setOtp] = useState("");
-  const [seconds, setSeconds] = useState(60);
+  const [seconds, setSeconds] = useState(otpTimerSeconds);
   const [resendDisabled, setResendDisabled] = useState(true);
 
   useEffect(() => {
@@ -61,12 +65,28 @@ const VerifyOtpScreen = () => {
     }
   };
 
-  const handleResendOtp = () => {
-    showToast("info", "OTP resent successfully!");
-    setSeconds(30);
-    setOtp("");
-    otpRef.current?.clear();
+  const handleResendOtp = async () => {
+    try {
+      const res = await authApiInstance.resendOtp({
+        mobile: mobile,
+      });
+      if (res?.status) {
+        showToast("info", "OTP resent successfully!");
+        setSeconds(otpTimerSeconds);
+        setOtp("");
+        otpRef.current?.clear();
+      }
+    } catch (err: any) {
+      console.log("Error While Resending OTP:", err);
+    }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setOtp("");
+      otpRef.current?.clear?.(); // if your OtpInput component supports clear
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -136,8 +156,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 40,
+    paddingHorizontal: width * 0.06,
+    paddingVertical: height * 0.05,
     justifyContent: "center",
   },
   container: {
