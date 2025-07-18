@@ -21,7 +21,10 @@ import verifyOtp from "../../../../assets/verify-otp.png";
 import { IVerifyMpinProps, IVerifyMpinForm } from "./LoginWithMpin.model";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
 import authApiInstance from "../../../services/auth/auth";
-import { saveUser } from "../../../library/utilities/secureStore";
+import {
+  saveUser,
+  saveUserIdentity,
+} from "../../../library/utilities/secureStore";
 import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
 import { colors } from "../../../config/constants";
 
@@ -62,6 +65,7 @@ const LoginWithMpinScreen = () => {
           id: res.data?.user?.id,
         };
         await saveUser(userData);
+        await saveUserIdentity(userData);
         setUser(userData);
         setIsAuthenticated(true);
       }
@@ -105,12 +109,10 @@ const LoginWithMpinScreen = () => {
                   )}
                 />
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("EnterMobile")}
+                  onPress={() => navigation.navigate("ForgotMpin")}
                   style={styles.forgotMpinContainer}
                 >
-                  <Text style={styles.forgotMpinText}>
-                    Forgot MPIN? Login with OTP
-                  </Text>
+                  <Text style={styles.forgotMpinText}>Forgot MPIN?</Text>
                 </TouchableOpacity>
 
                 <AppButton

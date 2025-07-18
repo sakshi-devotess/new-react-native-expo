@@ -1,5 +1,11 @@
 import request from "../../library/axios/request";
-import { IRequestOtp, ISetMpin, IVerifyMpin, IVerifyOtp } from "./auth.model";
+import {
+  IChangePassword,
+  IRequestOtp,
+  ISetMpin,
+  IVerifyMpin,
+  IVerifyOtp,
+} from "./auth.model";
 
 class AuthApi {
   ENDPOINT = "/auth";
@@ -47,6 +53,13 @@ class AuthApi {
       data: { refresh_token: refreshToken },
       headers: { "X-RefreshToken": true },
     }).then((res) => {
+      return res.data;
+    });
+  }
+
+  public async changeMyMpin(data: IChangePassword): Promise<any> {
+    const url = `${this.ENDPOINT}/change-my-mpin`;
+    return request({ url, method: "POST", data }).then((res: any) => {
       return res.data;
     });
   }

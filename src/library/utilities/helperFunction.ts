@@ -71,3 +71,10 @@ export const dateTimeTemplate = (options: any) => {
   const date = new Date(Number(options)).toLocaleString();
   return date;
 };
+
+export const getUserName = (user: any) => {
+  if (!user?.first_name && !user?.last_name) {
+    return "No name";
+  }
+  return `${user?.first_name} ${user?.last_name}` ?? "No name";
+};

@@ -20,18 +20,19 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import verifyOtp from "../../../../assets/verify-otp.png";
-import { IVerifyOtpProps } from "./VerifyOtp.model";
+import { IVerifyOtpScreenProps } from "./VerifyOtp.model";
 import { colors, otpTimerSeconds } from "../../../config/constants";
 import authApiInstance from "../../../services/auth/auth";
 import { showToast } from "../../../library/utilities/message";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
+import { getUserIdentity } from "../../../library/utilities/secureStore";
 
 const { width, height } = Dimensions.get("window");
 
 const VerifyOtpScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { mobile } = route.params as IVerifyOtpProps;
+  const { mobile, isForgotMpin } = route.params as IVerifyOtpScreenProps;
   const otpRef = useRef<any>(null);
   const [otp, setOtp] = useState("");
   const [seconds, setSeconds] = useState(otpTimerSeconds);
@@ -56,9 +57,12 @@ const VerifyOtpScreen = () => {
       });
       if (res?.status) {
         showToast("info", "OTP verified successfully!");
-        navigation.navigate("SetMpin", {
-          mobile: mobile,
-        });
+        const user = await getUserIdentity();
+        if (user?.mobile === mobile && user?.mpin && !isForgotMpin) {
+          navigation.navigate("LoginWithMpin", { mobile });
+        } else {
+          navigation.navigate("SetMpin", { mobile });
+        }
       }
     } catch (err: any) {
       console.log("Error verifying OTP:", err);

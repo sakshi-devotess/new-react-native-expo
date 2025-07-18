@@ -14,7 +14,7 @@ import {
 import AppButton from "../../../components/Button";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../../components/Form/Input/Input";
-import { IAddMobileNumberForm } from "./AddMobileNumber.model";
+import { IAddMobileNumberForm } from "./ForgotMpin.model";
 import {
   setApiErrorsToForm,
   showToast,
@@ -22,9 +22,8 @@ import {
 import authApiInstance from "../../../services/auth/auth";
 import addMobileNumber from "../../../../assets/add-mobile-number.png";
 import { useNavigation } from "@react-navigation/native";
-import { getUserIdentity } from "../../../library/utilities/secureStore";
 
-const AddMobileScreen = () => {
+const ForgotMpinScreen = () => {
   const navigation = useNavigation();
   const {
     control,
@@ -38,7 +37,6 @@ const AddMobileScreen = () => {
     },
   });
   const [isLogin, setIsLogin] = useState(false);
-  const [savedMobile, setSavedMobile] = useState<string | null>(null);
 
   const handleSendOTP = async (data: IAddMobileNumberForm) => {
     setIsLogin(true);
@@ -51,6 +49,7 @@ const AddMobileScreen = () => {
         showToast("info", "Otp sent successfully. Please check your mobile.");
         navigation.navigate("VerifyOtp", {
           mobile: data.mobile,
+          isForgotMpin: true,
         });
       }
     } catch (err: any) {
@@ -59,15 +58,6 @@ const AddMobileScreen = () => {
       setIsLogin(false);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      const user = await getUserIdentity();
-      if (user?.mobile && user?.mpin) {
-        setSavedMobile(user.mobile);
-      }
-    })();
-  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -81,26 +71,8 @@ const AddMobileScreen = () => {
               contentContainerStyle={styles.scrollContent}
               keyboardShouldPersistTaps="handled"
             >
-              <Text style={styles.welcomeText}>Welcome back!</Text>
-
-              {savedMobile && (
-                <View style={styles.continueBox}>
-                  <AppButton
-                    text={`Continue with ${savedMobile}`}
-                    onPress={() =>
-                      navigation.navigate("LoginWithMpin", {
-                        mobile: savedMobile,
-                      })
-                    }
-                    variant="primary"
-                  />
-                  <Text style={styles.orText}>OR</Text>
-                </View>
-              )}
               <Image source={addMobileNumber} style={styles.image} />
-              <Text style={styles.title}>
-                Continue with other Mobile number
-              </Text>
+              <Text style={styles.title}>Enter Mobile Number</Text>
 
               <Controller
                 control={control}
@@ -149,10 +121,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 30,
   },
   inputContainer: {
     flexDirection: "row",
@@ -199,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMobileScreen;
+export default ForgotMpinScreen;

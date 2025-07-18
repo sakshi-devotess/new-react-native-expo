@@ -13,7 +13,14 @@ class UserServiceApi {
 
   public async updateMyProfile(data: IUser): Promise<any> {
     const url = `${this.ENDPOINT}/my-profile`;
-    return request({ url, method: "PATCH", data }).then((res: any) => {
+    return request({
+      url,
+      method: "PATCH",
+      data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then((res: any) => {
       return res?.data;
     });
   }

@@ -76,6 +76,7 @@ request.interceptors.response.use(
 
         break;
       case 400:
+      case 404:
         pushBadRequestMessage(response.data);
         break;
       default:

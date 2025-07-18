@@ -1,11 +1,11 @@
-import request from '../../library/axios/request';
+import request from "../../library/axios/request";
 
 class FileServiceApi {
-  ENDPOINT = '/file';
+  ENDPOINT = "/file";
 
   public async getFile(id: number): Promise<any> {
     const url = `${this.ENDPOINT}/get-image/${id}`;
-    return request({ url, method: 'GET' }).then((res: any) => {
+    return request({ url, method: "GET" }).then((res: any) => {
       return res?.data;
     });
   }

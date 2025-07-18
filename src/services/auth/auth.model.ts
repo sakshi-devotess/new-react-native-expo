@@ -17,3 +17,9 @@ export interface IVerifyMpin {
   mobile: string;
   mpin: string;
 }
+
+export interface IChangePassword {
+  currentPassword: string;
+  password: string;
+  confirmPassword: string;
+}

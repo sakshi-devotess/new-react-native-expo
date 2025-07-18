@@ -12,3 +12,12 @@ export const getUser = async () => {
 export const deleteUser = async () => {
   await SecureStore.deleteItemAsync("user");
 };
+
+export const saveUserIdentity = async (identity: object) => {
+  await SecureStore.setItemAsync("user_identity", JSON.stringify(identity));
+};
+
+export const getUserIdentity = async () => {
+  const identity = await SecureStore.getItemAsync("user_identity");
+  return identity ? JSON.parse(identity) : null;
+};

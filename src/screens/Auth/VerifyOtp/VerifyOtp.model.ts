@@ -7,3 +7,8 @@ export interface IAddMobileScreenProps {
 export interface IVerifyOtpProps {
   otp: string;
 }
+
+export interface IVerifyOtpScreenProps {
+  mobile: string;
+  isForgotMpin?: boolean;
+}

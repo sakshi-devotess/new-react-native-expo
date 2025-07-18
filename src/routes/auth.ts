@@ -1,4 +1,5 @@
 import AddMobileScreen from "../screens/Auth/AddMobileNumber/AddMobileScreen";
+import ForgotMpinScreen from "../screens/Auth/ForgotMpin/ForgotMpinScreen";
 import LoginWithMpinScreen from "../screens/Auth/LoginWithMpin/LoginWithMpinScreen";
 import SetMpinScreen from "../screens/Auth/SetMpin/SetMpinScreen";
 import VerifyOtpScreen from "../screens/Auth/VerifyOtp/VerifyOtpScreen";
@@ -27,5 +28,9 @@ export const AUTH_ROUTES = [
   {
     name: AUTH_ROUTE.LOGIN_WITH_MPIN,
     component: LoginWithMpinScreen,
+  },
+  {
+    name: AUTH_ROUTE.FORGOT_MPIN,
+    component: ForgotMpinScreen,
   },
 ];

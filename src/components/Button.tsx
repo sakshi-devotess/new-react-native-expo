@@ -53,7 +53,7 @@ const AppButton: React.FC<ButtonProps> = ({
   const isLoading = loading || internalLoading;
 
   const variantStyles = {
-    primary: { backgroundColor: "#007bff", textColor: "#fff" },
+    primary: { backgroundColor: "#6c63ff", textColor: "#fff" },
     secondary: { backgroundColor: "#ddd", textColor: "#fff" },
     danger: { backgroundColor: "#dc3545", textColor: "#fff" },
     cancel: { backgroundColor: "#f0f0f0", textColor: "#333" },

@@ -9,26 +9,25 @@ import {
   Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { colors } from "../../config/constants";
+import { colors, config } from "../../config/constants";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Form/Input/Input";
 import { getBase64FromUrl } from "../../library/utilities/helperFunction";
 import {
   setApiErrorsToForm,
   setErrorsToForm,
+  showToast,
 } from "../../library/utilities/message";
 import AppButton from "../../components/Button";
 import fileApiInstance from "../../services/file/file.service";
 import { AuthContext } from "../../contexts/AuthenticatedUserContext";
 import { IUser } from "./profile.model";
-import authApiInstance from "../../services/auth/auth";
 import userApiInstance from "../../services/user/user.service";
 
 const Profile = () => {
   const { user, setUser } = useContext(AuthContext);
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("user :>> ", user);
   const values = {
     first_name: user?.first_name || "",
     last_name: user?.last_name || "",
@@ -56,8 +55,6 @@ const Profile = () => {
         try {
           const fileUrl = await fileApiInstance.getFile(fileId);
           setImage(fileUrl);
-          const logoBase64 = await getBase64FromUrl(fileUrl);
-          methods.setValue("profile_picture", logoBase64);
         } catch (fileError) {
           console.error("Error fetching updated profile image:", fileError);
         }
@@ -72,16 +69,18 @@ const Profile = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      base64: true,
       quality: 0.7,
     });
-
     if (!result.canceled) {
       const asset = result.assets[0];
-      const mimeType = asset.mimeType ?? "image/jpeg";
-      const fullBase64 = `data:${mimeType};base64,${asset.base64}`;
+      const file = {
+        uri: asset.uri,
+        name: asset.fileName || `profile_${Date.now()}.jpg`,
+        type: asset.mimeType ?? "image/jpeg",
+      };
       setImage(asset.uri);
-      setValue("profile_picture", fullBase64);
+
+      setValue("profile_picture", file);
     }
   };
 
@@ -93,9 +92,27 @@ const Profile = () => {
   const onHandleProfileUpdate = async (data: IUser) => {
     setIsLoading(true);
     try {
-      const res = await userApiInstance.updateMyProfile(data);
-      console.log("res :>> ", res);
+      const formData = new FormData();
+
+      formData.append("first_name", data.first_name);
+      formData.append("last_name", data.last_name);
+      formData.append("email", data.email);
+
+      if (data.profile_picture) {
+        formData.append("profile_picture", data.profile_picture);
+      }
+      const res = await userApiInstance.updateMyProfile(formData);
       if (res?.status) {
+        showToast("info", "Profile updated successfully.");
+        const userData = res?.data;
+        const updatedUser = {
+          ...user,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          email: userData.email,
+          file_id: userData.file_id || user.file_id,
+        };
+        setUser(updatedUser);
       }
     } catch (err: any) {
       setApiErrorsToForm(err?.response, methods);

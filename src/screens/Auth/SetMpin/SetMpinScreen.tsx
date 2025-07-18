@@ -20,7 +20,10 @@ import verifyOtp from "../../../../assets/verify-otp.png";
 import { ISetMpinForm, ISetMpinProps } from "./SetMpin.model";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
 import authApiInstance from "../../../services/auth/auth";
-import { saveUser } from "../../../library/utilities/secureStore";
+import {
+  saveUser,
+  saveUserIdentity,
+} from "../../../library/utilities/secureStore";
 import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
 
 const { width, height } = Dimensions.get("window");
@@ -62,6 +65,7 @@ const SetMpinScreen = () => {
           id: res.data?.user?.id,
         };
         await saveUser(userData);
+        await saveUserIdentity(userData);
         setUser(userData);
         setIsAuthenticated(true);
       }

@@ -1,9 +1,13 @@
 import TabsWithDynamicHeader from "../navigation/TabsWithDynamicHeader";
+import Account from "../screens/Account";
+import ChangeMpin from "../screens/Auth/ChangeMpin/ChangeMpin";
 import Profile from "../screens/Profile/Profile";
 
 export const STACK_ROUTES = {
   MAIN: "Main",
   PROFILE: "Profile",
+  ACCOUNT: "Account",
+  CHANGE_MPIN: "ChangeMpin",
 };
 
 export interface DrawerRouteConfig {
@@ -30,5 +34,18 @@ export const STACK_NAVIGATION_ROUTES: DrawerRouteConfig[] = [
       headerShown: true,
       title: "Profile",
     }),
+  },
+  {
+    name: STACK_ROUTES.ACCOUNT,
+    component: Account,
+    customOptions: () => ({
+      headerShown: true,
+      title: "Account",
+    }),
+  },
+  {
+    name: STACK_ROUTES.CHANGE_MPIN,
+    component: ChangeMpin,
+    title: "Change MPIN",
   },
 ];

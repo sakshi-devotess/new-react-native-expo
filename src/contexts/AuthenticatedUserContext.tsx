@@ -20,13 +20,14 @@ export const AuthProvider = ({ children }) => {
           first_name: userData.first_name,
           last_name: userData.last_name,
           email: userData.email,
+          file_id: userData.file_id,
         };
         setUser(updatedUser);
       }
 
       setIsLoading(false);
     })();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     setLogoutFn(async () => {

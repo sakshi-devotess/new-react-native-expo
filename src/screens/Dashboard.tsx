@@ -10,16 +10,13 @@ import {
 } from "react-native";
 import { colors } from "../config/constants";
 import dashboardBgImage from "../../assets/dashboard-background.jpg";
-import { AuthContext } from "../contexts/AuthenticatedUserContext";
-import { deleteUser } from "../library/utilities/secureStore";
+import { Ionicons } from "@expo/vector-icons";
+import { logout } from "../library/utilities/logoutUser";
 const { width, height } = Dimensions.get("window");
 
 const Dashboard = () => {
-  const { setIsAuthenticated, setUser } = useContext(AuthContext);
-  const onSignOut = async () => {
-    await deleteUser();
-    setUser(null);
-    setIsAuthenticated(false);
+  const onSignOut = () => {
+    logout();
   };
 
   return (
@@ -40,6 +37,31 @@ const Dashboard = () => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      <View style={styles.iconRow}>
+        <Text style={styles.sectionTitle}>Welcome to Saas Innova</Text>
+      </View>
+      <View style={styles.iconRow}>
+        <TouchableOpacity style={styles.iconItem}>
+          <View style={styles.iconBackground}>
+            <Ionicons name="calendar" size={32} color="black" />
+          </View>
+          <Text style={styles.iconLabel}>Book</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.iconItem}>
+          <View style={styles.iconBackground}>
+            <Ionicons name="people-circle" size={32} color="black" />
+          </View>
+          <Text style={styles.iconLabel}>Community</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.iconItem}>
+          <View style={styles.iconBackground}>
+            <Ionicons name="checkmark-circle" size={32} color="black" />
+          </View>
+          <Text style={styles.iconLabel}>Calender</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -79,6 +101,33 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  iconRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: width * 0.9,
+    alignSelf: "center",
+    marginTop: height * 0.03,
+  },
+  iconItem: {
+    alignItems: "center",
+  },
+  iconLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginTop: 5,
+  },
+  iconBackground: {
+    backgroundColor: colors.grey,
+    padding: 12,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });
 
