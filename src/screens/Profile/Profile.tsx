@@ -9,22 +9,19 @@ import {
   Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { colors, config } from "../../config/constants";
+import { colors } from "../../config/constants";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Form/Input/Input";
-import { getBase64FromUrl } from "../../library/utilities/helperFunction";
-import {
-  setApiErrorsToForm,
-  setErrorsToForm,
-  showToast,
-} from "../../library/utilities/message";
+import { setApiErrorsToForm, showToast } from "../../library/utilities/message";
 import AppButton from "../../components/Button";
 import fileApiInstance from "../../services/file/file.service";
 import { AuthContext } from "../../contexts/AuthenticatedUserContext";
 import { IUser } from "./profile.model";
 import userApiInstance from "../../services/user/user.service";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
+  const navigation = useNavigation();
   const { user, setUser } = useContext(AuthContext);
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +68,7 @@ const Profile = () => {
       allowsEditing: false,
       quality: 0.7,
     });
+    console.log("result :>> ", result);
     if (!result.canceled) {
       const asset = result.assets[0];
       const file = {
@@ -97,7 +95,7 @@ const Profile = () => {
       formData.append("first_name", data.first_name);
       formData.append("last_name", data.last_name);
       formData.append("email", data.email);
-
+      console.log("data.profile_picture :>> ", data.profile_picture);
       if (data.profile_picture) {
         formData.append("profile_picture", data.profile_picture);
       }
@@ -113,6 +111,7 @@ const Profile = () => {
           file_id: userData.file_id || user.file_id,
         };
         setUser(updatedUser);
+        navigation.goBack();
       }
     } catch (err: any) {
       setApiErrorsToForm(err?.response, methods);
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
   },
   cameraIcon: {
     alignItems: "center",
-    backgroundColor: colors.teal,
+    backgroundColor: colors.primary,
     borderRadius: 18,
     bottom: 4,
     elevation: 5,

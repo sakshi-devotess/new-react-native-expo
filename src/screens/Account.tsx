@@ -16,7 +16,7 @@ const Account = () => {
       <Cell
         title="Privacy Policy"
         icon="shield-checkmark-outline"
-        tintColor={colors.grey}
+        tintColor={colors.primary}
         onPress={() => {
           Alert.alert("Privacy Policy Coming Soon");
         }}
@@ -34,11 +34,11 @@ const Account = () => {
       <Cell
         title="Logout"
         icon="log-out-outline"
-        tintColor={colors.grey}
+        tintColor={colors.primary}
         onPress={() => {
           Alert.alert(
             "Logout?",
-            "You have to login again",
+            "Are you sure you want to logout?",
             [
               {
                 text: "Logout",

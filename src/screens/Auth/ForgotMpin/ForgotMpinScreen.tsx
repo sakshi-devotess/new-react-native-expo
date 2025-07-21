@@ -14,17 +14,19 @@ import {
 import AppButton from "../../../components/Button";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../../components/Form/Input/Input";
-import { IAddMobileNumberForm } from "./ForgotMpin.model";
+import { IAddMobileNumberForm, IForgotMpinProps } from "./ForgotMpin.model";
 import {
   setApiErrorsToForm,
   showToast,
 } from "../../../library/utilities/message";
 import authApiInstance from "../../../services/auth/auth";
 import addMobileNumber from "../../../../assets/add-mobile-number.png";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ForgotMpinScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { mobile } = route.params as IForgotMpinProps;
   const {
     control,
     handleSubmit,
@@ -33,7 +35,7 @@ const ForgotMpinScreen = () => {
     ...methods
   } = useForm({
     defaultValues: {
-      mobile: "",
+      mobile: mobile,
     },
   });
   const [isLogin, setIsLogin] = useState(false);

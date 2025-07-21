@@ -7,6 +7,7 @@ import {
   View,
   Dimensions,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { colors } from "../config/constants";
 import dashboardBgImage from "../../assets/dashboard-background.jpg";
@@ -15,8 +16,25 @@ import { logout } from "../library/utilities/logoutUser";
 const { width, height } = Dimensions.get("window");
 
 const Dashboard = () => {
-  const onSignOut = () => {
-    logout();
+  const onLogOut = () => {
+    Alert.alert(
+      "Log Out",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Log Out",
+          style: "destructive",
+          onPress: async () => {
+            await logout();
+          },
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -30,10 +48,10 @@ const Dashboard = () => {
             <Text style={styles.headerText}>Saas Innova</Text>
           </View>
           <TouchableOpacity
-            onPress={async () => await onSignOut()}
+            onPress={async () => await onLogOut()}
             style={styles.settingsButton}
           >
-            <Text style={styles.settingsText}>Sign Out</Text>
+            <Text style={styles.settingsText}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

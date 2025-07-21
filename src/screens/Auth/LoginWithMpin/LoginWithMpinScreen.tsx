@@ -109,7 +109,11 @@ const LoginWithMpinScreen = () => {
                   )}
                 />
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("ForgotMpin")}
+                  onPress={() =>
+                    navigation.navigate("ForgotMpin", {
+                      mobile: mobile,
+                    })
+                  }
                   style={styles.forgotMpinContainer}
                 >
                   <Text style={styles.forgotMpinText}>Forgot MPIN?</Text>

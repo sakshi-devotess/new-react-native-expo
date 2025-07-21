@@ -11,14 +11,18 @@ class UserServiceApi {
     });
   }
 
-  public async updateMyProfile(data: IUser): Promise<any> {
+  public async updateMyProfile(formData: FormData): Promise<any> {
+    console.log("formData :>> ", formData);
     const url = `${this.ENDPOINT}/my-profile`;
     return request({
       url,
       method: "PATCH",
-      data,
+      data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
+      },
+      transformRequest: (data, headers) => {
+        return formData;
       },
     }).then((res: any) => {
       return res?.data;

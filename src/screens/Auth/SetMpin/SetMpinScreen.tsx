@@ -13,7 +13,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import AppButton from "../../../components/Button";
 import { setApiErrorsToForm } from "../../../library/utilities/message";
 import verifyOtp from "../../../../assets/verify-otp.png";
@@ -29,7 +29,6 @@ import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
 const { width, height } = Dimensions.get("window");
 
 const SetMpinScreen = () => {
-  const navigation = useNavigation();
   const route = useRoute();
   const { mobile } = route.params as ISetMpinProps;
   const [isLoading, setIsLoading] = useState(false);

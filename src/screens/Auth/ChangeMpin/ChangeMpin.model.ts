@@ -1,5 +1,5 @@
 export interface IChangeMpinForm {
   currentMpin: string;
-  mpin: string;
+  newMpin: string;
   confirmMpin: string;
 }

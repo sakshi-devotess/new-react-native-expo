@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, StyleSheet, SafeAreaView, Keyboard } from "react-native";
+import { View, StyleSheet, SafeAreaView, Keyboard, Text } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import authApiInstance from "../../../services/auth/auth";
-import Input from "../../../components/Form/Input/Input";
 import {
   setApiErrorsToForm,
   showToast,
@@ -50,6 +49,7 @@ export default function ChangeMpin() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.infoContainer}>
+        <Text style={styles.label}>Current MPIN</Text>
         <Controller
           control={control}
           name="currentMpin"
@@ -61,6 +61,7 @@ export default function ChangeMpin() {
             />
           )}
         />
+        <Text style={styles.label}>New MPIN</Text>
         <Controller
           control={control}
           name="newMpin"
@@ -72,7 +73,7 @@ export default function ChangeMpin() {
             />
           )}
         />
-
+        <Text style={styles.label}>Confirm New MPIN</Text>
         <Controller
           control={control}
           name="confirmMpin"
@@ -113,5 +114,10 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
   },
 });

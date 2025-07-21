@@ -25,7 +25,6 @@ import { colors, otpTimerSeconds } from "../../../config/constants";
 import authApiInstance from "../../../services/auth/auth";
 import { showToast } from "../../../library/utilities/message";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
-import { getUserIdentity } from "../../../library/utilities/secureStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -56,9 +55,9 @@ const VerifyOtpScreen = () => {
         otp: otp,
       });
       if (res?.status) {
+        const userData = res?.data?.user;
         showToast("info", "OTP verified successfully!");
-        const user = await getUserIdentity();
-        if (user?.mobile === mobile && user?.mpin && !isForgotMpin) {
+        if (userData?.mpin && !isForgotMpin) {
           navigation.navigate("LoginWithMpin", { mobile });
         } else {
           navigation.navigate("SetMpin", { mobile });
@@ -88,7 +87,7 @@ const VerifyOtpScreen = () => {
   useFocusEffect(
     useCallback(() => {
       setOtp("");
-      otpRef.current?.clear?.(); // if your OtpInput component supports clear
+      otpRef.current?.clear?.();
     }, [])
   );
 
@@ -116,6 +115,7 @@ const VerifyOtpScreen = () => {
                 onChange={(text) => {
                   setOtp(text);
                 }}
+                secureTextEntry={false}
               />
 
               <View style={styles.resendContainer}>

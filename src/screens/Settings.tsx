@@ -22,7 +22,7 @@ const Settings = () => {
       />
       <Cell
         title="Account"
-        subtitle="Privacy, logout, delete account"
+        subtitle="Privacy, logout, and more"
         icon="key-outline"
         onPress={() => {
           navigation.navigate("Account");

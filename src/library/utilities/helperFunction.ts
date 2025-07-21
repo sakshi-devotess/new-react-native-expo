@@ -1,4 +1,3 @@
-import Toast from "react-native-toast-message";
 export const keyExists = (obj: any, key: any) => {
   if (!obj || (typeof obj !== "object" && !Array.isArray(obj))) {
     return false;
@@ -40,31 +39,6 @@ export const assignLabels = (
   type: [{ label: string; value: number | string }]
 ) => {
   return type?.find((x: any) => x.value === value)?.label;
-};
-
-export const getBase64FromUrl = async (url: string): Promise<string | null> => {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const mimeType = response?.headers?.get("content-type") ?? "image/jpeg";
-        const base64Body = reader?.result?.split(",")[1];
-        const base64 = `data:${mimeType};base64,${base64Body}`;
-        resolve(base64 as string);
-      };
-      reader.onerror = (error) => {
-        console.error("Error reading the blob:", error);
-        reject(error);
-      };
-      reader.readAsDataURL(blob);
-    });
-  } catch (error) {
-    console.error("Error fetching the file:", error);
-    return null;
-  }
 };
 
 export const dateTimeTemplate = (options: any) => {

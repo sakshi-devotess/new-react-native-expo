@@ -7,10 +7,14 @@ interface OtpInputProps {
   onChange: (text: string) => void;
   inputCount?: number;
   errorMessage?: string;
+  secureTextEntry?: boolean;
 }
 
 const OtpInput = React.forwardRef<any, OtpInputProps>(
-  ({ value, onChange, inputCount = 6, errorMessage }, ref) => {
+  (
+    { value, onChange, inputCount = 6, errorMessage, secureTextEntry = true },
+    ref
+  ) => {
     const otpInputRef = useRef<any>(null);
 
     useEffect(() => {
@@ -25,6 +29,7 @@ const OtpInput = React.forwardRef<any, OtpInputProps>(
           ref={otpInputRef}
           handleTextChange={onChange}
           inputCount={inputCount}
+          secureTextEntry={secureTextEntry}
           defaultValue={value}
           tintColor={errorMessage ? "red" : "gray"}
           offTintColor={errorMessage ? "red" : "gray"}

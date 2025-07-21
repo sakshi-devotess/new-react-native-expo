@@ -152,7 +152,6 @@ export function setApiErrorsToForm(
     methods.setError(moreFieldName ? `${moreFieldName}.${index}.${key}` : key, {
       message: `${capitalizeFirstLetter(value)}`,
     });
-    console.log("methods :>> ", getAllFields);
     // Check if field is already present in the form
     !keyExists(getAllFields, key) &&
       toastArray.push({
