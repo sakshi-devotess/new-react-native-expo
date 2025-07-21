@@ -4,25 +4,11 @@ import {
   StyleSheet,
   Text,
   View,
-  ViewStyle,
-  TextStyle,
   ActivityIndicator,
 } from "react-native";
+import { IButtonProps, variantStyles } from "./Button.model";
 
-type Variant = "primary" | "secondary" | "danger" | "cancel";
-
-interface ButtonProps {
-  text: string;
-  onPress: () => Promise<void> | void;
-  loading?: boolean;
-  disabled?: boolean;
-  variant?: Variant;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
-  disableForMs?: number;
-}
-
-const AppButton: React.FC<ButtonProps> = ({
+const AppButton: React.FC<IButtonProps> = ({
   text,
   onPress,
   loading = false,
@@ -51,13 +37,6 @@ const AppButton: React.FC<ButtonProps> = ({
 
   const isDisabled = disabled || loading || internalLoading || tempDisabled;
   const isLoading = loading || internalLoading;
-
-  const variantStyles = {
-    primary: { backgroundColor: "#6c63ff", textColor: "#fff" },
-    secondary: { backgroundColor: "#ddd", textColor: "#fff" },
-    danger: { backgroundColor: "#dc3545", textColor: "#fff" },
-    cancel: { backgroundColor: "#f0f0f0", textColor: "#333" },
-  };
 
   const { backgroundColor, textColor } = variantStyles[variant];
 

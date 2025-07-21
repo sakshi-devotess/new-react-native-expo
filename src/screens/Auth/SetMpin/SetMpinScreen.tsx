@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { useRoute } from "@react-navigation/native";
-import AppButton from "../../../components/Button";
+import AppButton from "../../../components/Button/Button";
 import { setApiErrorsToForm } from "../../../library/utilities/message";
 import verifyOtp from "../../../../assets/verify-otp.png";
 import { ISetMpinForm, ISetMpinProps } from "./SetMpin.model";

@@ -1,16 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import OTPTextInput from "react-native-otp-textinput";
+import { IOtpInputProps } from "./OtpInput.model";
 
-interface OtpInputProps {
-  value: string;
-  onChange: (text: string) => void;
-  inputCount?: number;
-  errorMessage?: string;
-  secureTextEntry?: boolean;
-}
-
-const OtpInput = React.forwardRef<any, OtpInputProps>(
+const OtpInput = React.forwardRef<any, IOtpInputProps>(
   (
     { value, onChange, inputCount = 6, errorMessage, secureTextEntry = true },
     ref

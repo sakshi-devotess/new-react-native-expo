@@ -1,6 +1,6 @@
 import { GestureResponderEvent } from "react-native";
 
-export interface ContactRowProps {
+export interface IContactRowProps {
   name: string;
   onPress?: (event: GestureResponderEvent) => void;
   style?: object;

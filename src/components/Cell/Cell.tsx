@@ -1,7 +1,7 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { CellProps } from "./Cell.model";
+import { ICellProps } from "./Cell.model";
 
 const Cell = ({
   title,
@@ -13,7 +13,7 @@ const Cell = ({
   secondIcon,
   subtitle,
   showForwardIcon = true,
-}: CellProps) => (
+}: ICellProps) => (
   <TouchableOpacity style={[styles.cell, style]} onPress={onPress}>
     <View style={[styles.iconContainer, { backgroundColor: tintColor }]}>
       <Ionicons name={icon} size={24} marginStart={4} color={iconColor} />

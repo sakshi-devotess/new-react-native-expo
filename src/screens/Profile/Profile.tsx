@@ -13,7 +13,7 @@ import { colors } from "../../config/constants";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../components/Form/Input/Input";
 import { setApiErrorsToForm, showToast } from "../../library/utilities/message";
-import AppButton from "../../components/Button";
+import AppButton from "../../components/Button/Button";
 import fileApiInstance from "../../services/file/file.service";
 import { AuthContext } from "../../contexts/AuthenticatedUserContext";
 import { IUser } from "./profile.model";
@@ -95,7 +95,6 @@ const Profile = () => {
       formData.append("first_name", data.first_name);
       formData.append("last_name", data.last_name);
       formData.append("email", data.email);
-      console.log("data.profile_picture :>> ", data.profile_picture);
       if (data.profile_picture) {
         formData.append("profile_picture", data.profile_picture);
       }

@@ -13,7 +13,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import AppButton from "../../../components/Button";
+import AppButton from "../../../components/Button/Button";
 import {
   useRoute,
   useNavigation,

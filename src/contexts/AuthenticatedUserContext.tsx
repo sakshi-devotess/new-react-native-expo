@@ -1,11 +1,29 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { deleteUser, getUser } from "../library/utilities/secureStore";
 import { setLogoutFn } from "../library/utilities/logoutUser";
 import userApiInstance from "../services/user/user.service";
 
-export const AuthContext = createContext(null);
+interface AuthProviderProps {
+  readonly children: ReactNode;
+}
 
-export const AuthProvider = ({ children }) => {
+interface IAuthContextType {
+  readonly user: any;
+  readonly setUser: React.Dispatch<React.SetStateAction<any>>;
+  readonly isLoading: boolean;
+  readonly isAuthenticated: boolean;
+  readonly setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const AuthContext = createContext<IAuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -37,10 +55,18 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
+  const authContextValue = useMemo(
+    () => ({
+      user,
+      setUser,
+      isLoading,
+      isAuthenticated,
+      setIsAuthenticated,
+    }),
+    [user, isLoading, isAuthenticated]
+  );
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, isLoading, isAuthenticated, setIsAuthenticated }}
-    >
+    <AuthContext.Provider value={authContextValue}>
       {children}
     </AuthContext.Provider>
   );

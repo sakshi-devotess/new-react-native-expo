@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import AppButton from "../../../components/Button";
+import AppButton from "../../../components/Button/Button";
 import { Controller, useForm } from "react-hook-form";
 import Input from "../../../components/Form/Input/Input";
 import { IAddMobileNumberForm } from "./AddMobileNumber.model";

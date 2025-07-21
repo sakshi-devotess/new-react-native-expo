@@ -40,7 +40,7 @@ request.interceptors.response.use(
     const prevRequestConfig = error.config;
 
     switch (response?.data?.statusCode) {
-      case 401:
+      case 401: {
         const user = await getUser();
         const refresh_token = user?.refresh_token;
         if (!refresh_token) {
@@ -75,6 +75,7 @@ request.interceptors.response.use(
         }
 
         break;
+      }
       case 400:
       case 404:
         pushBadRequestMessage(response.data);

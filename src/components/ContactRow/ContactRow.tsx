@@ -1,7 +1,7 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { ContactRowProps } from "./ContactRow.modl";
+import { IContactRowProps } from "./ContactRow.modl";
 import { colors } from "../../config/constants";
 
 const ContactRow = ({
@@ -12,7 +12,7 @@ const ContactRow = ({
   selected,
   showForwardIcon = true,
   subtitle2,
-}: ContactRowProps) => (
+}: IContactRowProps) => (
   <TouchableOpacity
     style={[styles.row, style]}
     onPress={onPress}

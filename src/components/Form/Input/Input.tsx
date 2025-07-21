@@ -8,52 +8,29 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFormContext } from "react-hook-form";
+import { IFormInputProps } from "./Input.model";
 
-interface FormInputProps {
-  value: string;
-  onChange: (text: string) => void;
-  placeholder: string;
-  secureTextEntry?: boolean;
-  errorMessage?: string;
-  keyboardType?:
-    | "default"
-    | "email-address"
-    | "numeric"
-    | "phone-pad"
-    | "decimal-pad"
-    | "number-pad";
-  textContentType?: "none" | "username" | "password" | "name";
-  autoCapitalize?: "none" | "sentences" | "words" | "characters";
-  autoCorrect?: boolean;
-  attribute?: string;
-  maxLength?: number;
-}
-
-export default function Input({
-  value,
-  onChange,
-  placeholder,
-  secureTextEntry = false,
-  errorMessage,
-  keyboardType = "default",
-  textContentType = "none",
-  autoCapitalize = "none",
-  autoCorrect = false,
-  attribute = "",
-  maxLength = 100,
-}: FormInputProps) {
-  let formContext;
-  try {
-    formContext = useFormContext();
-  } catch (e) {
-    formContext = null;
-  }
+export default function Input(props: IFormInputProps) {
+  const {
+    value,
+    onChange,
+    placeholder,
+    secureTextEntry = false,
+    errorMessage,
+    keyboardType = "default",
+    textContentType = "none",
+    autoCapitalize = "none",
+    autoCorrect = false,
+    attribute = "",
+    maxLength = 100,
+  } = props;
+  const formContext = useFormContext?.();
 
   const [isSecure, setIsSecure] = useState(secureTextEntry);
 
+  const rawError = formContext?.formState?.errors?.[attribute]?.message;
   const error: string =
-    errorMessage ??
-    String(formContext?.formState?.errors?.[attribute]?.message || "");
+    errorMessage ?? (typeof rawError === "string" ? rawError : "");
   return (
     <View style={styles.inputWrapper}>
       <View

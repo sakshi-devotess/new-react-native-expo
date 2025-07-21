@@ -6,7 +6,7 @@ import {
   setApiErrorsToForm,
   showToast,
 } from "../../../library/utilities/message";
-import AppButton from "../../../components/Button";
+import AppButton from "../../../components/Button/Button";
 import { IChangeMpinForm } from "./ChangeMpin.model";
 import { useNavigation } from "@react-navigation/native";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
