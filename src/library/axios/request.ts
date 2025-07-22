@@ -10,7 +10,7 @@ const request = axios.create({
   baseURL: config.apiUrl,
   timeout: 1 * 60 * 1000, // 1 minute
   headers: {
-    Accept: "application/json",
+    // Accept: "application/json",
   },
   // withCredentials: true,
 });

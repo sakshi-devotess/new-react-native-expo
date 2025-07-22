@@ -18,8 +18,8 @@ export interface IVerifyMpin {
   mpin: string;
 }
 
-export interface IChangePassword {
-  currentPassword: string;
-  password: string;
-  confirmPassword: string;
+export interface IChangeMpin {
+  currentMpin: string;
+  newMpin: string;
+  confirmMpin: string;
 }

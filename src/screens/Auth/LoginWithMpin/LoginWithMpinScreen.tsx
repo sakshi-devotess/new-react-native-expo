@@ -27,12 +27,14 @@ import {
 } from "../../../library/utilities/secureStore";
 import { AuthContext } from "../../../contexts/AuthenticatedUserContext";
 import { colors } from "../../../config/constants";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthStackParamList } from "../../../types/navigation";
 
 const { width, height } = Dimensions.get("window");
 
 const LoginWithMpinScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const { mobile } = route.params as IVerifyMpinProps;
   const [isLoading, setIsLoading] = useState(false);
   const { setUser, setIsAuthenticated } = useContext(AuthContext);

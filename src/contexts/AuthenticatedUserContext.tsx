@@ -21,7 +21,13 @@ interface IAuthContextType {
   readonly setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AuthContext = createContext<IAuthContextType | null>(null);
+export const AuthContext = createContext<IAuthContextType>({
+  user: null,
+  setUser: () => {},
+  isLoading: true,
+  isAuthenticated: false,
+  setIsAuthenticated: () => {},
+});
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);

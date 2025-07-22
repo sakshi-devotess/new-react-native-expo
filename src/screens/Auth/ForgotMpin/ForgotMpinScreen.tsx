@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -22,9 +22,11 @@ import {
 import authApiInstance from "../../../services/auth/auth";
 import addMobileNumber from "../../../../assets/add-mobile-number.png";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { AuthStackParamList } from "../../../types/navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const ForgotMpinScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const route = useRoute();
   const { mobile } = route.params as IForgotMpinProps;
   const {

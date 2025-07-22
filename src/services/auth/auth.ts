@@ -1,6 +1,6 @@
 import request from "../../library/axios/request";
 import {
-  IChangePassword,
+  IChangeMpin,
   IRequestOtp,
   ISetMpin,
   IVerifyMpin,
@@ -57,7 +57,7 @@ class AuthApi {
     });
   }
 
-  public async changeMyMpin(data: IChangePassword): Promise<any> {
+  public async changeMyMpin(data: IChangeMpin): Promise<any> {
     const url = `${this.ENDPOINT}/change-my-mpin`;
     return request({ url, method: "POST", data }).then((res: any) => {
       return res.data;

@@ -25,12 +25,14 @@ import { colors, otpTimerSeconds } from "../../../config/constants";
 import authApiInstance from "../../../services/auth/auth";
 import { showToast } from "../../../library/utilities/message";
 import OtpInput from "../../../components/Form/OtpInput/OtpInput";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthStackParamList } from "../../../types/navigation";
 
 const { width, height } = Dimensions.get("window");
 
 const VerifyOtpScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const { mobile, isForgotMpin } = route.params as IVerifyOtpScreenProps;
   const otpRef = useRef<any>(null);
   const [otp, setOtp] = useState("");

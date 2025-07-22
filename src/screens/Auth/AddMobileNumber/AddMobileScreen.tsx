@@ -23,9 +23,11 @@ import authApiInstance from "../../../services/auth/auth";
 import addMobileNumber from "../../../../assets/add-mobile-number.png";
 import { useNavigation } from "@react-navigation/native";
 import { getUserIdentity } from "../../../library/utilities/secureStore";
+import { AuthStackParamList } from "../../../types/navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const AddMobileScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const {
     control,
     handleSubmit,

@@ -1,5 +1,4 @@
 import request from "../../library/axios/request";
-import { IUser } from "./user.model";
 
 class UserServiceApi {
   ENDPOINT = "/user";
@@ -15,13 +14,11 @@ class UserServiceApi {
     const url = `${this.ENDPOINT}/my-profile`;
     return request({
       url,
-      method: "POST",
+      method: "PATCH",
       data: formData,
+      transformRequest: () => formData,
       headers: {
         "content-type": "multipart/form-data",
-      },
-      transformRequest: (data, headers) => {
-        return formData;
       },
     }).then((res: any) => {
       return res?.data;

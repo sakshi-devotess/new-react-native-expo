@@ -6,15 +6,17 @@ import Cell from "../components/Cell/Cell";
 import ContactRow from "../components/ContactRow/ContactRow";
 import { AuthContext } from "../contexts/AuthenticatedUserContext";
 import { getUserName } from "../library/utilities/helperFunction";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "../types/navigation";
 
 const Settings = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const { user } = useContext(AuthContext);
 
   return (
     <View>
       <ContactRow
-        name={`${getUserName(user)}` ?? "No name"}
+        name={getUserName(user)}
         style={styles.contactRow}
         onPress={() => {
           navigation.navigate("Profile");

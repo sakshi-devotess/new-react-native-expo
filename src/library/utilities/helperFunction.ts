@@ -50,5 +50,5 @@ export const getUserName = (user: any) => {
   if (!user?.first_name && !user?.last_name) {
     return "No name";
   }
-  return `${user?.first_name} ${user?.last_name}` ?? "No name";
+  return `${user?.first_name} ${user?.last_name}`;
 };

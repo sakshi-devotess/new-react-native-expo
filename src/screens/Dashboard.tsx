@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -48,7 +48,7 @@ const Dashboard = () => {
             <Text style={styles.headerText}>Saas Innova</Text>
           </View>
           <TouchableOpacity
-            onPress={async () => await onLogOut()}
+            onPress={async () => onLogOut()}
             style={styles.settingsButton}
           >
             <Text style={styles.settingsText}>Log Out</Text>

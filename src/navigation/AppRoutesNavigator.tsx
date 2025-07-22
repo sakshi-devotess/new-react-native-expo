@@ -11,8 +11,8 @@ const AppRoutesNavigator = () => {
           <Stack.Screen
             key={name}
             name={name}
-            options={(props) => ({
-              title: title ? title : "",
+            options={() => ({
+              title: title || "",
               ...(customOptions?.() || {}),
             })}
           >

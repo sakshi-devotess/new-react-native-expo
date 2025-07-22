@@ -68,7 +68,6 @@ const Profile = () => {
       allowsEditing: false,
       quality: 0.7,
     });
-    console.log("result :>> ", result);
     if (!result.canceled) {
       const asset = result.assets[0];
       const file = {
@@ -82,21 +81,25 @@ const Profile = () => {
     }
   };
 
-  const initials = user?.username
+  const initials = user?.first_name
     ?.split(" ")
-    .map((name) => name[0])
+    .map((name: string) => name[0])
     .join("");
 
   const onHandleProfileUpdate = async (data: IUser) => {
     setIsLoading(true);
     try {
       const formData = new FormData();
-
       formData.append("first_name", data.first_name);
       formData.append("last_name", data.last_name);
       formData.append("email", data.email);
       if (data.profile_picture) {
-        formData.append("profile_picture", data.profile_picture);
+        const file = {
+          uri: data.profile_picture.uri,
+          name: data.profile_picture.name,
+          type: data.profile_picture.type,
+        };
+        formData.append("profile_picture", file as any);
       }
       const res = await userApiInstance.updateMyProfile(formData);
       if (res?.status) {

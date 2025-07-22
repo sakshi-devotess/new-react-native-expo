@@ -1,12 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { View, Alert } from "react-native";
 import { colors } from "../config/constants";
 import { logout } from "../library/utilities/logoutUser";
 import Cell from "../components/Cell/Cell";
 import { useNavigation } from "@react-navigation/native";
+import { MainStackParamList } from "../types/navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const Account = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const onSignOut = () => {
     logout();
   };
