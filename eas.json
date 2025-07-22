@@ -1,0 +1,33 @@
+{
+  "cli": {
+    "version": ">= 10.1.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "REACT_NATIVE_APP_PUBLIC_URL": "http://192.168.29.112:7002"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "REACT_NATIVE_APP_PUBLIC_URL": "http://192.168.29.112:7002"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "REACT_NATIVE_APP_PUBLIC_URL": "http://192.168.29.112:7002"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
