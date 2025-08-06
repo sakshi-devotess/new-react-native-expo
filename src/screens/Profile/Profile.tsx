@@ -45,7 +45,6 @@ const Profile = () => {
     formState: { errors },
     setValue,
   } = methods;
-
   useEffect(() => {
     const fetchProfilePicture = async (fileId: number) => {
       if (fileId) {

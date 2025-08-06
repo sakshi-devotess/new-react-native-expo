@@ -5,7 +5,7 @@ export const colors = {
   border: "#565656",
   red: "#EF5350",
   pink: "#EC407A",
-  teal: "#26A69A",
+  teal: "#2ea397ff",
   grey: "#BDBDBD",
   white: "#FFFFFF",
   black: "#000000",

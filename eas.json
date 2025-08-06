@@ -23,7 +23,7 @@
         "buildType": "apk"
       },
       "env": {
-        "REACT_NATIVE_APP_PUBLIC_URL": "http://192.168.29.112:7002"
+        "REACT_NATIVE_APP_PUBLIC_URL": "https://mobileapi.devoteeinfotech.com"
       }
     }
   },

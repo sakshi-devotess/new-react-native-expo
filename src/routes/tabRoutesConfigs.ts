@@ -2,7 +2,7 @@ import { ComponentProps } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
 import Settings from "../screens/Settings";
-import User from "../screens/User/User";
+import User from "../screens/User/UserList";
 
 export const TAB_ROUTE = {
   DASHBOARD: "Dashboard",
