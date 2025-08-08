@@ -75,7 +75,7 @@ const User = () => {
               <View style={styles.leftContent}>
                 <View style={styles.avatar}>
                   <Text style={styles.avatarText}>
-                    {item?.first_name?.[0] ?? ""}
+                    {item?.first_name?.[0] ?? "N"}
                   </Text>
                 </View>
                 <View>
@@ -84,12 +84,13 @@ const User = () => {
                     numberOfLines={1} // Ensures truncation occurs after 1 line
                     ellipsizeMode="tail" // Ensures the text is truncated at the tail (end) with "..."
                   >
-                    {item.first_name} {item.last_name || ""}
+                    {item.first_name ?? "No Name"} {item.last_name}
                   </Text>
-
-                  <View style={styles.typeTag}>
-                    <Text style={styles.typeTagText}>{item.email}</Text>
-                  </View>
+                  {item?.email && (
+                    <View style={styles.typeTag}>
+                      <Text style={styles.typeTagText}>{item.email}</Text>
+                    </View>
+                  )}
                 </View>
               </View>
               <View style={styles.actions}>
@@ -154,7 +155,7 @@ const User = () => {
           visible={!!idToDelete}
           onClose={() => setIdToDelete(null)}
           onConfirm={handleDelete}
-          entityName={"Animal"}
+          entityName={"User"}
         />
       </Loader>
     </SafeAreaView>

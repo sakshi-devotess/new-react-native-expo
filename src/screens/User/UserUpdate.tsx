@@ -24,7 +24,6 @@ const UserUpdate = (props: IUpdateUser) => {
         id: data.id,
       };
       const res = await userApiInstance.updateUser(updatedData);
-      console.log("formData :>> ", res);
 
       if (res?.status) {
         methods.reset();

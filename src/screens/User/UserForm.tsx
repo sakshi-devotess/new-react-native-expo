@@ -62,20 +62,21 @@ const UserForm = (props: IUserForm) => {
                 value={value}
                 onChange={onChange}
                 attribute="mobile"
+                keyboardType="phone-pad"
               />
             )}
           />
 
           <View style={styles.buttonRow}>
             <AppButton
-              text={"cancel"}
+              text={"Cancel"}
               onPress={handleClose}
               variant="cancel"
               style={{ ...styles.buttonItem, ...styles.cancelButton }}
               textStyle={{ color: "#555" }}
             />
             <AppButton
-              text={isEdit ? "edit" : "create"}
+              text={isEdit ? "Edit" : "Create"}
               onPress={methods.handleSubmit(onSubmit)}
               style={styles.buttonItem}
             />
