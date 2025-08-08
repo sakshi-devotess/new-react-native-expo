@@ -53,6 +53,13 @@ class UserServiceApi {
       return res?.data;
     });
   }
+
+  public async deleteUser(id: number): Promise<any> {
+    const url = `${this.ENDPOINT}/${id}`;
+    return request({ url, method: "DELETE" }).then((res: any) => {
+      return res?.data;
+    });
+  }
 }
 
 const userApiInstance = new UserServiceApi();

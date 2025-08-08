@@ -25,7 +25,20 @@ const User = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
   const [users, setUsers] = useState<IUser[]>([]);
-  const handleDelete = async () => {};
+
+  const handleDelete = async () => {
+    if (!idToDelete) return;
+    setIdToDelete(null);
+    try {
+      const res = await userApiInstance.deleteUser(idToDelete);
+      if (res?.status) {
+        fetchUsers();
+      }
+    } catch (err: any) {
+      console.error("Error deleting user:", err);
+    }
+  };
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
