@@ -5,11 +5,11 @@ export default {
     slug: "Boilerplate",
     version: "1.0.0",
     orientation: "portrait",
-    icon: null,
+    icon: "",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     splash: {
-      image: null,
+      image: "",
       resizeMode: "contain",
       backgroundColor: "#3b3131ff",
     },
@@ -18,7 +18,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: null,
+        foregroundImage: "",
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
