@@ -5,20 +5,20 @@ export default {
     slug: "Boilerplate",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "",
+    icon: "./assets/icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     splash: {
-      image: "",
+      image: "./assets/splash-icon.png",
       resizeMode: "contain",
-      backgroundColor: "#3b3131ff",
+      backgroundColor: "#ffffff",
     },
     ios: {
       supportsTablet: true,
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "",
+        foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
