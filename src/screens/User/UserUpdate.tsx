@@ -5,7 +5,7 @@ import userApiInstance from "../../services/user/user.service";
 import { setApiErrorsToForm, showToast } from "../../library/utilities/message";
 
 const UserUpdate = (props: IUpdateUser) => {
-  const { data, setUserDialog, isEdit, fetchUsers } = props;
+  const { data, setUserDialog, isEdit, onUpdated } = props;
   const initialValues = {
     first_name: data?.first_name ?? "",
     last_name: data?.last_name ?? null,
@@ -26,10 +26,15 @@ const UserUpdate = (props: IUpdateUser) => {
       const res = await userApiInstance.updateUser(updatedData);
 
       if (res?.status) {
+        const updated: IUser = (res?.data as IUser) ?? {
+          ...data,
+          ...formData,
+          id: data.id,
+        };
         methods.reset();
         showToast("info", "User updated successfully.");
         setUserDialog(false);
-        fetchUsers();
+        onUpdated(updated);
       }
     } catch (err: any) {
       setApiErrorsToForm(err?.response, methods);

@@ -8,7 +8,7 @@ export interface IUser {
 
 export interface ICreateUser {
   setUserDialog: (value: boolean) => void;
-  fetchUsers: () => void;
+  onCreated?: (user: IUser) => void;
 }
 
 export interface IUserForm {
@@ -21,6 +21,6 @@ export interface IUserForm {
 export interface IUpdateUser {
   data: IUser;
   setUserDialog: (value: boolean) => void;
-  fetchUsers: () => void;
+  onUpdated: (user: IUser) => void;
   isEdit?: boolean;
 }

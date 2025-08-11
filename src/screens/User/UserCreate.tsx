@@ -5,7 +5,7 @@ import userApiInstance from "../../services/user/user.service";
 import { setApiErrorsToForm, showToast } from "../../library/utilities/message";
 
 const UserCreate = (props: ICreateUser) => {
-  const { setUserDialog, fetchUsers } = props;
+  const { setUserDialog, onCreated } = props;
   const methods = useForm<IUser>({
     defaultValues: {
       first_name: null,
@@ -18,11 +18,15 @@ const UserCreate = (props: ICreateUser) => {
   const onSubmit = async (formData: IUser) => {
     try {
       const res = await userApiInstance.createUser(formData);
+      const created: IUser = (res?.data as IUser) ?? {
+        ...formData,
+        id: res?.data?.id ?? Date.now(),
+      };
       if (res?.status) {
         methods.reset();
         showToast("info", "User created successfully.");
         setUserDialog(false);
-        fetchUsers();
+        onCreated?.(created);
       }
     } catch (err: any) {
       setApiErrorsToForm(err?.response, methods);

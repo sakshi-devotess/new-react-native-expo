@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   Modal,
@@ -17,6 +17,7 @@ import UserUpdate from "./UserUpdate";
 import { IUser } from "./user.model";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 import userApiInstance from "../../services/user/user.service";
+import { showToast } from "../../library/utilities/message";
 
 const User = () => {
   const [loading, setLoading] = useState(false);
@@ -25,14 +26,25 @@ const User = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
   const [users, setUsers] = useState<IUser[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleCreated = (u: IUser) => setUsers((prev) => [u, ...prev]);
+
+  const handleUpdated = useCallback((u: IUser) => {
+    setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, ...u } : x)));
+  }, []);
 
   const handleDelete = async () => {
     if (!idToDelete) return;
     setIdToDelete(null);
+    setUsers((prev) => prev.filter((u) => Number(u.id) !== idToDelete));
     try {
       const res = await userApiInstance.deleteUser(idToDelete);
-      if (res?.status) {
-        fetchUsers();
+      if (!res?.status) {
+        await fetchUsers();
+        showToast("error", "Failed to delete user.");
+      } else {
+        showToast("info", "User deleted successfully.");
       }
     } catch (err: any) {
       console.error("Error deleting user:", err);
@@ -54,6 +66,12 @@ const User = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchUsers();
+    setRefreshing(false);
+  }, [fetchUsers]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,7 +106,13 @@ const User = () => {
                   </Text>
                   {item?.email && (
                     <View style={styles.typeTag}>
-                      <Text style={styles.typeTagText}>{item.email}</Text>
+                      <Text
+                        style={styles.typeTagText}
+                        numberOfLines={1}
+                        ellipsizeMode="middle"
+                      >
+                        {item.email}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -113,6 +137,8 @@ const User = () => {
             </View>
           )}
           ListEmptyComponent={EmptyComponent("No users found")}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
 
         {/* Modal for adding/updating user */}
@@ -129,7 +155,7 @@ const User = () => {
                   setUserDialog={() => {
                     setModalVisible(false);
                   }}
-                  fetchUsers={fetchUsers}
+                  onCreated={handleCreated}
                 />
               </View>
             </View>
@@ -144,7 +170,7 @@ const User = () => {
                 data={selectedUser!}
                 setUserDialog={() => setUpdateModalVisible(false)}
                 isEdit={true}
-                fetchUsers={fetchUsers}
+                onUpdated={handleUpdated}
               />
             </View>
           </View>
@@ -228,6 +254,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 6,
     alignSelf: "flex-start",
+    maxWidth: 220,
   },
   typeTagText: {
     fontSize: 12,
